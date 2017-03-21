@@ -1,6 +1,7 @@
 import numpy as np
 import argparse
 import csv
+import sys
 
 
 class NeuralNet:
@@ -31,8 +32,15 @@ def load_data_file(file):
             features.append(row[:-1])
     return np.array(features), np.array(labels)
 
-if __name__ == '__main__':
+
+def parse_args(_args=None):
     parser = argparse.ArgumentParser(description='Run a multilayer perceptron via vector operations')
     parser.add_argument('data', help='file containing data')
-    parser.add_argument('--num_hidden', '-h', type=int, help='number of hidden nodes to use')
-    args = parser.parse_args()
+    parser.add_argument('--num_hidden', '-H', type=int, help='number of hidden nodes to use')
+    if _args is None:
+        return parser.parse_args()
+    return parser.parse_args(_args)
+
+if __name__ == '__main__':
+    args = parse_args()
+    print(args)
