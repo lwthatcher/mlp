@@ -6,7 +6,13 @@ import numpy as np
 
 class TestNeuralNet(TestCase):
     def test__num_and_names(self):
-        self.fail()
+        a1, b1 = NeuralNet._num_and_names(5)
+        self.assertEqual(a1, 5)
+        np.testing.assert_array_equal(b1, ['0', '1', '2', '3', '4'])
+        names = ['setosa', 'versicolor', 'virginica']
+        a2, b2 = NeuralNet._num_and_names(names)
+        self.assertEqual(a2, 3)
+        np.testing.assert_array_equal(b2, names)
 
 
 class TestCLI(TestCase):
