@@ -6,19 +6,24 @@ import sys
 
 class NeuralNet:
 
-    def __init__(self, features, classes, hidden_layers=20, learning_rate=0.9):
+    def __init__(self, features, classes, hidden_layer=20, learning_rate=0.9):
         """
-        Initializes the neural network with the
+        Initializes the neural network.
         :type features: int or array-of-string
         :type classes: int or array-of-string
+        :type hidden_layer: int or array-of-int
         :param features: The input features to expect.
             int: the number of features to expect
             array-of-string: the names of the features to expect
         :param classes: The valid output classifications.
-        :param hidden_layers:
-        :param learning_rate:
+        :param hidden_layer: Number of hidden nodes.
+        :param learning_rate: The learning rate to scale results by.
         """
-        pass
+        f_num, f_names = self._num_and_names(features)
+        c_num, c_names = self._num_and_names(classes)
+        self.f_num = f_num
+        self.f_names = f_names
+
 
     def fit(self, X, Y):
         pass
@@ -41,6 +46,13 @@ class NeuralNet:
             num = len(v)
             names = v
         return num, names
+
+    @staticmethod
+    def _num_array(v):
+        if type(v) is int:
+            return [v]
+        else:
+            return [int(i) for i in v]
 
 
 def load_data_file(file):
