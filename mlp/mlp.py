@@ -27,10 +27,10 @@ class NeuralNet:
         self.c_num = c_num
         self.f_names = f_names
         self.c_names = c_names
-        # specify number of nodes per layer
-        layers = [f_num]
-        layers.extend(self._num_array(hidden))
-        layers.append(c_num)
+        # get weight matrices and bias vectors
+        W, b = self._weight_matrices(self._nodes_per_layer(f_num, hidden, c_num))
+        self.W = W
+        self.b = b
 
     def fit(self, X, Y):
         pass
