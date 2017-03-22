@@ -25,6 +25,21 @@ class TestNeuralNet(TestCase):
         l3 = NeuralNet._num_array(["20", "15", "30"])
         np.testing.assert_array_equal(l3, [20, 15, 30])
 
+    def test__nodes_per_layer(self):
+        l1 = NeuralNet._nodes_per_layer(5, 20, 3)
+        np.testing.assert_array_equal(l1, [5, 20, 3])
+        l2 = NeuralNet._nodes_per_layer(5, [20, 13], 8)
+        np.testing.assert_array_equal(l2, [5, 20, 13, 8])
+
+    def test__weight_matrices(self):
+        W, b = NeuralNet._weight_matrices([5, 20, 3])
+        self.assertEqual(len(W), 2)
+        self.assertEqual(len(b), 2)
+        self.assertEqual(W[0].shape, (5, 20))
+        self.assertEqual(W[1].shape, (20, 3))
+        self.assertEqual(b[0].shape, (1, 20))
+        self.assertEqual(b[1].shape, (1, 3))
+
 
 class TestCLI(TestCase):
     def test_load_data_file(self):
