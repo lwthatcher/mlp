@@ -6,24 +6,31 @@ import sys
 
 class NeuralNet:
 
-    def __init__(self, features, classes, hidden_layer=20, learning_rate=0.9):
+    def __init__(self, features, classes, hidden=20, learning_rate=0.9):
         """
         Initializes the neural network.
         :type features: int or array-of-string
         :type classes: int or array-of-string
-        :type hidden_layer: int or array-of-int
+        :type hidden: int or array-of-int
         :param features: The input features to expect.
             int: the number of features to expect
             array-of-string: the names of the features to expect
         :param classes: The valid output classifications.
-        :param hidden_layer: Number of hidden nodes.
+        :param hidden: Specifies the number of nodes for hidden layer(s).
+            int: one hidden layer with n nodes, where hidden=n
+            array-of-int: m hidden layers, where layer i in [0..m] have hidden[i] number of nodes
         :param learning_rate: The learning rate to scale results by.
         """
         f_num, f_names = self._num_and_names(features)
         c_num, c_names = self._num_and_names(classes)
         self.f_num = f_num
+        self.c_num = c_num
         self.f_names = f_names
-
+        self.c_names = c_names
+        # specify number of nodes per layer
+        layers = [f_num]
+        layers.extend(self._num_array(hidden))
+        layers.append(c_num)
 
     def fit(self, X, Y):
         pass
@@ -53,6 +60,22 @@ class NeuralNet:
             return [v]
         else:
             return [int(i) for i in v]
+
+    @classmethod
+    def _nodes_per_layer(cls, f, h, c):
+        layers = [f]
+        layers.extend(cls._num_array(h))
+        layers.append(c)
+        return layers
+
+    @staticmethod
+    def _weight_matrices(layers):
+        W = []
+        b = []
+        for i in range(len(layers)-1):
+            W.append(np.random.randn(layers[i], layers[i+1]))
+            b.append(np.random.randn(1, layers[i+1]))
+        return W, b
 
 
 def load_data_file(file):
