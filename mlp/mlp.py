@@ -23,10 +23,9 @@ class NeuralNet:
         """
         f_num, f_names = self._num_and_names(features)
         c_num, c_names = self._num_and_names(classes)
-        self.f_num = f_num
-        self.c_num = c_num
-        self.f_names = f_names
-        self.c_names = c_names
+        # save names of input/output features
+        self._features = f_names
+        self._output_classes = c_names
         # get weight matrices and bias vectors
         W, b = self._weight_matrices(self._nodes_per_layer(f_num, hidden, c_num))
         self.W = W
