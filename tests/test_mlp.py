@@ -5,6 +5,22 @@ import numpy as np
 
 
 class TestNeuralNet(TestCase):
+
+    def test_forward_prop(self):
+        # init with preset values
+        nn = NeuralNet(2, 3, 2)
+        nn.W[0] = np.array([[.1, .1, .1], [.1, .2, .3]])
+        nn.W[1] = np.array([[.5, 1], [1, 2], [-2, 3]])
+        nn.b[0] = np.array([[1.1, 2.1, 3.1]])
+        nn.b[1] = np.array([[.3, -13]])
+        # do one iteration of forward propagation
+        x = np.array([1, 2])
+        nn._forward_prop(x)
+        # test values
+        np.testing.assert_array_almost_equal(nn.Z[0], np.array([[1, 2]]))  # input vector
+        np.testing.assert_array_almost_equal(nn.Z[1], np.array([[1.4, 2.6, 3.8]]))  # hidden layer output
+        np.testing.assert_array_almost_equal(nn.Z[2], np.array([[0, 5]]))  # Z_out = [-4,5] ReLU(Z_out) = [0,5]
+
     def test__constructor(self):
         nn = NeuralNet(5, 20, 3)
         # weight matrices
@@ -16,10 +32,10 @@ class TestNeuralNet(TestCase):
         self.assertEqual(nn.b[0].shape, (1, 20))
         self.assertEqual(nn.b[1].shape, (1, 3))
         # output vectors
-        self.assertEqual(len(nn._Z), 3)
-        self.assertEqual(nn._Z[0].shape, (1, 5))
-        self.assertEqual(nn._Z[1].shape, (1, 20))
-        self.assertEqual(nn._Z[2].shape, (1, 3))
+        self.assertEqual(len(nn.Z), 3)
+        self.assertEqual(nn.Z[0].shape, (1, 5))
+        self.assertEqual(nn.Z[1].shape, (1, 20))
+        self.assertEqual(nn.Z[2].shape, (1, 3))
 
     def test__num_and_names(self):
         a1, b1 = NeuralNet._num_and_names(5)

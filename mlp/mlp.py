@@ -32,11 +32,13 @@ class NeuralNet:
         self.W = W
         self.b = b
         # setup output values
-        self._Z = []
+        self.Z = []
         for l in layers:
-            self._Z.append(np.zeros((1, l)))
+            self.Z.append(np.zeros((1, l)))
         # learning rate
         self.C = learning_rate
+        # other private variables
+        self._num_layers = len(layers)
 
     def fit(self, X, Y):
         pass
@@ -45,7 +47,9 @@ class NeuralNet:
         pass
 
     def _forward_prop(self, x):
-        pass
+        self.Z[0] = x.reshape(1, len(x))
+        for i in range(self._num_layers-1):
+            self.Z[i + 1] = self.Z[i].dot(self.W[i]) + self.b[i]
 
     def _back_prop(self, y):
         pass
