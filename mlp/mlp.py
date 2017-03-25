@@ -27,9 +27,16 @@ class NeuralNet:
         self._features = f_names
         self._output_classes = c_names
         # get weight matrices and bias vectors
-        W, b = self._weight_matrices(self._nodes_per_layer(f_num, hidden, c_num))
+        layers = self._nodes_per_layer(f_num, hidden, c_num)
+        W, b = self._weight_matrices(layers)
         self.W = W
         self.b = b
+        # setup output values
+        self._Z = []
+        for l in layers[1:]:
+            self._Z.append(np.zeros(l))
+        # learning rate
+        self.C = learning_rate
 
     def fit(self, X, Y):
         pass
@@ -45,6 +52,13 @@ class NeuralNet:
 
     @staticmethod
     def _num_and_names(v):
+        """
+        Converts the input v into both the length (num),
+        and a list of names (names)
+        :param v: int or array-of-string
+            int: The length. Names will be the numbers.
+            array-of-string: The names. Num will be the length of v.
+        """
         if type(v) is int:
             num = v
             names = [str(i) for i in range(num)]
@@ -55,6 +69,9 @@ class NeuralNet:
 
     @staticmethod
     def _num_array(v):
+        """
+        Makes sure the provided argument is in array form, not just an int.
+        """
         if type(v) is int:
             return [v]
         else:
@@ -62,6 +79,17 @@ class NeuralNet:
 
     @classmethod
     def _nodes_per_layer(cls, f, h, c):
+        """
+        Gets the number of nodes for each layer,
+        where the first layer is the input layer
+        and the last layer is the output layer
+        :param f: The number of nodes for the input layer (# of features)
+        :param h: int or array-of-int
+            The number of nodes for the hidden layers
+        :param c: The number of nodes for the output layer (# of output classifications)
+        :return: array-of-int
+            The number of nodes for each layer
+        """
         layers = [f]
         layers.extend(cls._num_array(h))
         layers.append(c)
