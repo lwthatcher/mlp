@@ -1,12 +1,12 @@
 import numpy as np
 import argparse
 import csv
-import sys
+from mlp.activation_functions import ReLU, Sigmoid
 
 
 class NeuralNet:
 
-    def __init__(self, features, hidden=20, classes=2, learning_rate=0.9):
+    def __init__(self, features, hidden=20, classes=2, learning_rate=0.9, a_func=ReLU):
         """
         Initializes the neural network.
         :type features: int or array-of-string
@@ -20,6 +20,7 @@ class NeuralNet:
             int: one hidden layer with n nodes, where hidden=n
             array-of-int: m hidden layers, where layer i in [0..m] have hidden[i] number of nodes
         :param learning_rate: The learning rate to scale results by.
+        :param a_func: The activation function to use. Default = ReLU
         """
         f_num, f_names = self._num_and_names(features)
         c_num, c_names = self._num_and_names(classes)
@@ -37,6 +38,9 @@ class NeuralNet:
             self.Z.append(np.zeros((1, l)))
         # learning rate
         self.C = learning_rate
+        # Activation Function
+        self.activation = a_func.activation
+        self.f_prime = a_func.f_prime
         # other private variables
         self._num_layers = len(layers)
 
@@ -49,7 +53,7 @@ class NeuralNet:
     def _forward_prop(self, x):
         self.Z[0] = x.reshape(1, len(x))
         for i in range(self._num_layers-1):
-            self.Z[i + 1] = self.Z[i].dot(self.W[i]) + self.b[i]
+            self.Z[i + 1] = self.activation(self.Z[i].dot(self.W[i]) + self.b[i])
 
     def _back_prop(self, y):
         pass
