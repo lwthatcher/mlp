@@ -6,7 +6,7 @@ import sys
 
 class NeuralNet:
 
-    def __init__(self, features, classes, hidden=20, learning_rate=0.9):
+    def __init__(self, features, hidden=20, classes=2, learning_rate=0.9):
         """
         Initializes the neural network.
         :type features: int or array-of-string
@@ -26,15 +26,15 @@ class NeuralNet:
         # save names of input/output features
         self._features = f_names
         self._output_classes = c_names
-        # get weight matrices and bias vectors
+        # get weight matrices and bias weight vectors
         layers = self._nodes_per_layer(f_num, hidden, c_num)
         W, b = self._weight_matrices(layers)
         self.W = W
         self.b = b
         # setup output values
         self._Z = []
-        for l in layers[1:]:
-            self._Z.append(np.zeros(l))
+        for l in layers:
+            self._Z.append(np.zeros((1, l)))
         # learning rate
         self.C = learning_rate
 

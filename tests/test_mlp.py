@@ -5,6 +5,22 @@ import numpy as np
 
 
 class TestNeuralNet(TestCase):
+    def test__constructor(self):
+        nn = NeuralNet(5, 20, 3)
+        # weight matrices
+        self.assertEqual(len(nn.W), 2)
+        self.assertEqual(nn.W[0].shape, (5, 20))
+        self.assertEqual(nn.W[1].shape, (20, 3))
+        # bias weights
+        self.assertEqual(len(nn.b), 2)
+        self.assertEqual(nn.b[0].shape, (1, 20))
+        self.assertEqual(nn.b[1].shape, (1, 3))
+        # output vectors
+        self.assertEqual(len(nn._Z), 3)
+        self.assertEqual(nn._Z[0].shape, (1, 5))
+        self.assertEqual(nn._Z[1].shape, (1, 20))
+        self.assertEqual(nn._Z[2].shape, (1, 3))
+
     def test__num_and_names(self):
         a1, b1 = NeuralNet._num_and_names(5)
         self.assertEqual(a1, 5)
