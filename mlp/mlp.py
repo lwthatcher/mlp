@@ -32,10 +32,12 @@ class NeuralNet:
         W, b = self._weight_matrices(layers)
         self.W = W
         self.b = b
-        # setup output values
+        # setup output and delta vectors
         self.Z = []
+        self.δ = []
         for l in layers:
             self.Z.append(np.zeros((1, l)))
+            self.δ.append(np.zeros((1, l)))
         # learning rate
         self.C = learning_rate
         # Activation Function
