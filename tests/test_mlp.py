@@ -21,6 +21,33 @@ class TestNeuralNet(TestCase):
         np.testing.assert_array_almost_equal(nn.Z[1], np.array([[1.4, 2.6, 3.8]]))  # hidden layer output
         np.testing.assert_array_almost_equal(nn.Z[2], np.array([[0, 5]]))  # Z_out = [-4,5] ReLU(Z_out) = [0,5]
 
+    def test_back_prop(self):
+        # init with preset values
+        nn = NeuralNet(2, 3, 2)
+        # -weights-
+        nn.W[0] = np.array([[.6, .2, 1], [1, .5, 0]])
+        nn.W[1] = np.array([[.1, 1], [1, .25], [.1, 1]])
+        nn.b[0] = np.array([[0, 0, 0]])
+        nn.b[1] = np.array([[0, 0]])
+        # -outputs-
+        nn.Z[2] = np.array([[.6, 2.1]])
+        nn.Z[1] = np.array([[1, .4, 1]])
+        nn.Z[0] = np.array([[1, .4]])
+        # -learning rate-
+        nn.C = 1.
+        # do one iteration of back-prop
+        y = np.array([[1.1, 2]])
+        nn._back_prop(y)
+        # check that it computes the correct delta values
+        np.testing.assert_array_almost_equal(nn.δ[1], np.array([[.5, -.1]]))
+        np.testing.assert_array_almost_equal(nn.δ[0], np.array([[-.05, .475, -.05]]))
+        # check weight updates
+        np.testing.assert_array_almost_equal(nn.W[1], np.array([[.6, .9], [1.2, -.15], [.6, .9]]))
+        np.testing.assert_array_almost_equal(nn.W[0], np.array([[.55, .675, .95], [.98, .69, -.02]]))
+        # check bias weight updates
+        np.testing.assert_array_almost_equal(nn.b[1], np.array([[.5, -.1]]))
+        np.testing.assert_array_almost_equal(nn.δ[0], np.array([[-.05, .475, -.05]]))
+
     def test__constructor(self):
         nn = NeuralNet(5, 20, 3)
         # weight matrices
