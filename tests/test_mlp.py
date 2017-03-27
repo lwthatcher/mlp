@@ -6,6 +6,28 @@ import numpy as np
 
 class TestNeuralNet(TestCase):
 
+    def test_predict(self):
+        # init with preset values
+        nn = NeuralNet(2, 3, 2)
+        nn.W[0] = np.array([[.6, .2, 1], [1, .5, 0]])
+        nn.W[1] = np.array([[.1, 1], [1, .25], [.1, 1]])
+        nn.b[0] = np.array([[0., 0., 0.]])
+        nn.b[1] = np.array([[1., -1.]])
+        # input values
+        X = np.array([[1., .4],
+                      [0., 0.],
+                      [1., 1.],
+                      [2., .8]])
+        # expected output
+        Y = np.array([[1.6, 1.1],
+                      [1., 0.],
+                      [1.96, 1.775],
+                      [2.2, 3.2]])
+        # actual output
+        Z = nn.predict(X)
+        # compare
+        np.testing.assert_array_almost_equal(Y, Z)
+
     def test_forward_prop(self):
         # init with preset values
         nn = NeuralNet(2, 3, 2)

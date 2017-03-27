@@ -47,12 +47,16 @@ class NeuralNet:
         pass
 
     def predict(self, X):
-        pass
+        out = []
+        for x in X:
+            out.append(self._forward_prop(x))
+        return np.array(out)
 
     def _forward_prop(self, x):
         self.Z[0] = x.reshape(1, len(x))
         for i in range(self._num_layers-1):
             self.Z[i + 1] = self.activation(self.Z[i].dot(self.W[i]) + self.b[i])
+        return self.Z[-1][0]
 
     def _back_prop(self, y):
         # output layer's delta: δ = (T-Z) * f'(net)
