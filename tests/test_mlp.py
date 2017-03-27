@@ -36,6 +36,10 @@ class TestNeuralNet(TestCase):
         self.assertEqual(nn.Z[0].shape, (1, 5))
         self.assertEqual(nn.Z[1].shape, (1, 20))
         self.assertEqual(nn.Z[2].shape, (1, 3))
+        # delta vectors
+        self.assertEqual(len(nn.δ), 2)
+        self.assertEqual(nn.δ[0].shape, (1, 20))
+        self.assertEqual(nn.δ[1].shape, (1, 3))
 
     def test__num_and_names(self):
         a1, b1 = NeuralNet._num_and_names(5)
