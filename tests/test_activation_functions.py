@@ -17,8 +17,9 @@ class TestReLU(TestCase):
 
     def test_f_prime(self):
         x = np.array([[-4, 5]])
-        ReLU.f_prime(x)
-        np.testing.assert_array_equal(x, np.array([[0, 1]]))
+        y = ReLU.f_prime(x)
+        np.testing.assert_array_equal(y, np.array([[0, 1]]))
+        np.testing.assert_array_equal(x, np.array([[-4, 5]]))
 
 
 class TestSigmoid(TestCase):
@@ -35,5 +36,6 @@ class TestSigmoid(TestCase):
 
     def test_f_prime(self):
         x = np.array([[.1, .3, .5, 1]])
-        Sigmoid.f_prime(x)
-        np.testing.assert_array_almost_equal(x, np.array([[.09, .21, .25, 0]]))
+        y = Sigmoid.f_prime(x)
+        np.testing.assert_array_almost_equal(y, np.array([[.09, .21, .25, 0]]))
+        np.testing.assert_array_almost_equal(x, np.array([[.1, .3, .5, 1]]))

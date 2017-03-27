@@ -9,9 +9,10 @@ class ReLU:
 
     @staticmethod
     def f_prime(net):
-        net[net <= 0] = 0
-        net[net > 0] = 1
-        return net
+        n = net.copy()
+        n[n <= 0] = 0
+        n[n > 0] = 1
+        return n
 
 
 class Sigmoid:
@@ -21,4 +22,4 @@ class Sigmoid:
 
     @staticmethod
     def f_prime(net):
-        net *= (1. - net)
+        return net * (1. - net)
