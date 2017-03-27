@@ -4,14 +4,14 @@ from scipy.special import expit
 class ReLU:
     @staticmethod
     def activation(net):
-        net[net < 0] = 0
+        net[net < 0] = 0.
         return net
 
     @staticmethod
     def f_prime(net):
         n = net.copy()
-        n[n <= 0] = 0
-        n[n > 0] = 1
+        n[n <= 0] = 0.
+        n[n > 0] = 1.
         return n
 
 

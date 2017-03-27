@@ -55,7 +55,16 @@ class NeuralNet:
             self.Z[i + 1] = self.activation(self.Z[i].dot(self.W[i]) + self.b[i])
 
     def _back_prop(self, y):
-        pass
+        # output layer's delta: δ = (T-Z) * f'(net)
+        self.δ[-1] = (y - self.Z[-1]) * self.f_prime(self.Z[-1])
+        # compute deltas: δj = Σ[δk*Wjk] * f'(net)
+        for i in range(self._num_layers-2, 0, -1):
+                self.δ[i-1] = np.tensordot(self.δ[i], self.W[i], (1, 1)) * self.f_prime(self.Z[i])
+        # update weights: ΔWij = C*δj*Zi
+        for i in range(self._num_layers-2, -1, -1):
+            # Note since δ,W,b are all of length: num_layers-1, layer(Z[i]) == layer(b[i+1])
+            self.W[i] += self.C * np.outer(self.Z[i], self.δ[i])
+            self.b[i] += self.C * self.δ[i]
 
     @staticmethod
     def _num_and_names(v):

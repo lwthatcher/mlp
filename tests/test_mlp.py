@@ -27,8 +27,8 @@ class TestNeuralNet(TestCase):
         # -weights-
         nn.W[0] = np.array([[.6, .2, 1], [1, .5, 0]])
         nn.W[1] = np.array([[.1, 1], [1, .25], [.1, 1]])
-        nn.b[0] = np.array([[0, 0, 0]])
-        nn.b[1] = np.array([[0, 0]])
+        nn.b[0] = np.array([[0., 0., 0.]])
+        nn.b[1] = np.array([[0., 0.]])
         # -outputs-
         nn.Z[2] = np.array([[.6, 2.1]])
         nn.Z[1] = np.array([[1, .4, 1]])
@@ -42,7 +42,7 @@ class TestNeuralNet(TestCase):
         np.testing.assert_array_almost_equal(nn.δ[1], np.array([[.5, -.1]]))
         np.testing.assert_array_almost_equal(nn.δ[0], np.array([[-.05, .475, -.05]]))
         # check weight updates
-        np.testing.assert_array_almost_equal(nn.W[1], np.array([[.6, .9], [1.2, -.15], [.6, .9]]))
+        np.testing.assert_array_almost_equal(nn.W[1], np.array([[.6, .9], [1.2, .21], [.6, .9]]))
         np.testing.assert_array_almost_equal(nn.W[0], np.array([[.55, .675, .95], [.98, .69, -.02]]))
         # check bias weight updates
         np.testing.assert_array_almost_equal(nn.b[1], np.array([[.5, -.1]]))
