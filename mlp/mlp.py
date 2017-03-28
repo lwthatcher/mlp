@@ -7,7 +7,8 @@ from mlp import util
 
 class NeuralNet:
 
-    def __init__(self, features, hidden=20, classes=2, learning_rate=0.9, a_func=ReLU, max_epochs=1000, patience=20):
+    def __init__(self, features, hidden=20, classes=2, learning_rate=0.9, a_func=ReLU, max_epochs=1000, patience=20,
+                 validation_set=None):
         """
         Initializes the neural network.
         :type features: int or array-of-string
@@ -24,6 +25,9 @@ class NeuralNet:
         :param a_func: The activation function to use. Default = ReLU
         :param max_epochs: maximum number of epochs to train for
         :param patience: number of iterations to check for accuracy improvement
+        :param validation_set: tuple (Vx, Vy)
+            Vx: the validation training data
+            Vy: the validation test labels
         """
         f_num, f_names = util.num_and_names(features)
         c_num, c_names = util.num_and_names(classes)
@@ -50,6 +54,7 @@ class NeuralNet:
             max_epochs = np.inf
         self._max_epochs = max_epochs
         self._patience = patience
+        self._VS = validation_set
 
     def fit(self, X, Y):
         epoch = 0
@@ -65,6 +70,7 @@ class NeuralNet:
         out = []
         for x in X:
             out.append(self._forward_prop(x))
+        # TODO: for classification take argmax
         return np.array(out)
 
     def _forward_prop(self, x):
