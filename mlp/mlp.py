@@ -51,7 +51,14 @@ class NeuralNet:
         self._patience = patience
 
     def fit(self, X, Y):
-        pass
+        epoch = 0
+        num_samples = len(X)
+        while epoch < self._max_epochs:
+            idx = self._shuffle_indices(num_samples)
+            for i in idx:
+                self._forward_prop(X[i])
+                self._back_prop(Y[i])
+            # TODO: implement BSSF, validation set, accuracy checks, and patience stopping criteria
 
     def predict(self, X):
         out = []
@@ -97,9 +104,6 @@ class NeuralNet:
 
     @staticmethod
     def _format_as_array(v):
-        """
-        Makes sure the provided argument is in array form, not just an int.
-        """
         if type(v) is int:
             return [v]
         else:
@@ -136,6 +140,12 @@ class NeuralNet:
             W.append(np.random.randn(layers[i], layers[i+1]))
             b.append(np.random.randn(1, layers[i+1]))
         return W, b
+
+    @staticmethod
+    def _shuffle_indices(num_samples):
+        idx = np.arange(num_samples)
+        np.random.shuffle(idx)
+        return idx
 
 
 def load_data_file(file):
