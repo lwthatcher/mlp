@@ -90,26 +90,6 @@ class TestNeuralNet(TestCase):
         self.assertEqual(nn.δ[0].shape, (1, 20))
         self.assertEqual(nn.δ[1].shape, (1, 3))
 
-    def test__num_and_names(self):
-        a1, b1 = NeuralNet._num_and_names(5)
-        self.assertEqual(a1, 5)
-        np.testing.assert_array_equal(b1, ['0', '1', '2', '3', '4'])
-        names = ['setosa', 'versicolor', 'virginica']
-        a2, b2 = NeuralNet._num_and_names(names)
-        self.assertEqual(a2, 3)
-        np.testing.assert_array_equal(b2, names)
-
-    def test__format_as_array(self):
-        # number
-        l1 = NeuralNet._format_as_array(20)
-        np.testing.assert_array_equal(l1, [20])
-        # array of int
-        l2 = NeuralNet._format_as_array([20, 15, 30])
-        np.testing.assert_array_equal(l2, [20, 15, 30])
-        # array of string
-        l3 = NeuralNet._format_as_array(["20", "15", "30"])
-        np.testing.assert_array_equal(l3, [20, 15, 30])
-
     def test__nodes_per_layer(self):
         l1 = NeuralNet._nodes_per_layer(5, 20, 3)
         np.testing.assert_array_equal(l1, [5, 20, 3])

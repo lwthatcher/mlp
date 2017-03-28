@@ -2,6 +2,7 @@ import numpy as np
 import argparse
 import csv
 from mlp.activation_functions import ReLU, Sigmoid
+from mlp import util
 
 
 class NeuralNet:
@@ -24,8 +25,8 @@ class NeuralNet:
         :param max_epochs: maximum number of epochs to train for
         :param patience: number of iterations to check for accuracy improvement
         """
-        f_num, f_names = self._num_and_names(features)
-        c_num, c_names = self._num_and_names(classes)
+        f_num, f_names = util.num_and_names(features)
+        c_num, c_names = util.num_and_names(classes)
         # save names of input/output features
         self._features = f_names
         self._output_classes = c_names
@@ -54,7 +55,7 @@ class NeuralNet:
         epoch = 0
         num_samples = len(X)
         while epoch < self._max_epochs:
-            idx = self._shuffle_indices(num_samples)
+            idx = util.shuffle_indices(num_samples)
             for i in idx:
                 self._forward_prop(X[i])
                 self._back_prop(Y[i])
@@ -85,30 +86,6 @@ class NeuralNet:
             self.W[i] += self.C * np.outer(self.Z[i], self.δ[i])
             self.b[i] += self.C * self.δ[i]
 
-    @staticmethod
-    def _num_and_names(v):
-        """
-        Converts the input v into both the length (num),
-        and a list of names (names)
-        :param v: int or array-of-string
-            int: The length. Names will be the numbers.
-            array-of-string: The names. Num will be the length of v.
-        """
-        if type(v) is int:
-            num = v
-            names = [str(i) for i in range(num)]
-        else:
-            num = len(v)
-            names = v
-        return num, names
-
-    @staticmethod
-    def _format_as_array(v):
-        if type(v) is int:
-            return [v]
-        else:
-            return [int(i) for i in v]
-
     @classmethod
     def _nodes_per_layer(cls, f, h, c):
         """
@@ -123,7 +100,7 @@ class NeuralNet:
             The number of nodes for each layer
         """
         layers = [f]
-        layers.extend(cls._format_as_array(h))
+        layers.extend(util.format_as_array(h))
         layers.append(c)
         return layers
 
@@ -140,12 +117,6 @@ class NeuralNet:
             W.append(np.random.randn(layers[i], layers[i+1]))
             b.append(np.random.randn(1, layers[i+1]))
         return W, b
-
-    @staticmethod
-    def _shuffle_indices(num_samples):
-        idx = np.arange(num_samples)
-        np.random.shuffle(idx)
-        return idx
 
 
 def load_data_file(file):
