@@ -63,7 +63,8 @@ class NeuralNet:
         self.δ[-1] = (y - self.Z[-1]) * self.f_prime(self.Z[-1])
         # compute deltas: δj = Σ[δk*Wjk] * f'(net)
         for i in range(self._num_layers-2, 0, -1):
-                self.δ[i-1] = np.tensordot(self.δ[i], self.W[i], (1, 1)) * self.f_prime(self.Z[i])
+                self.δ[i-1] = np.tensordot(self.δ[i], self.W[i], (1, 1)) \
+                              * self.f_prime(self.Z[i])
         # update weights: ΔWij = C*δj*Zi
         for i in range(self._num_layers-2, -1, -1):
             # Note since δ,W,b are all of length: num_layers-1, layer(Z[i]) == layer(b[i+1])
@@ -117,6 +118,11 @@ class NeuralNet:
 
     @staticmethod
     def _weight_matrices(layers):
+        """
+        Creates the weights matrices (W) and the bias vectors (b) for each appropriate layer
+        :param layers: array of integers with number of nodes per layer
+        :return: W, b
+        """
         W = []
         b = []
         for i in range(len(layers)-1):
