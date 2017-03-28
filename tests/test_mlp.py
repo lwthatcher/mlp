@@ -99,15 +99,15 @@ class TestNeuralNet(TestCase):
         self.assertEqual(a2, 3)
         np.testing.assert_array_equal(b2, names)
 
-    def test__num_array(self):
+    def test__format_as_array(self):
         # number
-        l1 = NeuralNet._num_array(20)
+        l1 = NeuralNet._format_as_array(20)
         np.testing.assert_array_equal(l1, [20])
         # array of int
-        l2 = NeuralNet._num_array([20, 15, 30])
+        l2 = NeuralNet._format_as_array([20, 15, 30])
         np.testing.assert_array_equal(l2, [20, 15, 30])
         # array of string
-        l3 = NeuralNet._num_array(["20", "15", "30"])
+        l3 = NeuralNet._format_as_array(["20", "15", "30"])
         np.testing.assert_array_equal(l3, [20, 15, 30])
 
     def test__nodes_per_layer(self):

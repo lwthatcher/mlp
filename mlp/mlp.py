@@ -6,7 +6,7 @@ from mlp.activation_functions import ReLU, Sigmoid
 
 class NeuralNet:
 
-    def __init__(self, features, hidden=20, classes=2, learning_rate=0.9, a_func=ReLU):
+    def __init__(self, features, hidden=20, classes=2, learning_rate=0.9, a_func=ReLU, max_epochs=1000, patience=20):
         """
         Initializes the neural network.
         :type features: int or array-of-string
@@ -21,6 +21,8 @@ class NeuralNet:
             array-of-int: m hidden layers, where layer i in [0..m] have hidden[i] number of nodes
         :param learning_rate: The learning rate to scale results by.
         :param a_func: The activation function to use. Default = ReLU
+        :param max_epochs: maximum number of epochs to train for
+        :param patience: number of iterations to check for accuracy improvement
         """
         f_num, f_names = self._num_and_names(features)
         c_num, c_names = self._num_and_names(classes)
@@ -40,8 +42,13 @@ class NeuralNet:
         # Activation Function
         self.activation = a_func.activation
         self.f_prime = a_func.f_prime
-        # other private variables
-        self._num_layers = len(layers)
+        # helper variables
+        self.num_layers = len(layers)
+        # stopping criteria
+        if max_epochs is None:
+            max_epochs = np.inf
+        self._max_epochs = max_epochs
+        self._patience = patience
 
     def fit(self, X, Y):
         pass
@@ -54,7 +61,7 @@ class NeuralNet:
 
     def _forward_prop(self, x):
         self.Z[0] = x.reshape(1, len(x))
-        for i in range(self._num_layers-1):
+        for i in range(self.num_layers-1):
             self.Z[i + 1] = self.activation(self.Z[i].dot(self.W[i]) + self.b[i])
         return self.Z[-1][0]
 
@@ -62,11 +69,11 @@ class NeuralNet:
         # output layer's delta: δ = (T-Z) * f'(net)
         self.δ[-1] = (y - self.Z[-1]) * self.f_prime(self.Z[-1])
         # compute deltas: δj = Σ[δk*Wjk] * f'(net)
-        for i in range(self._num_layers-2, 0, -1):
+        for i in range(self.num_layers-2, 0, -1):
                 self.δ[i-1] = np.tensordot(self.δ[i], self.W[i], (1, 1)) \
                               * self.f_prime(self.Z[i])
         # update weights: ΔWij = C*δj*Zi
-        for i in range(self._num_layers-2, -1, -1):
+        for i in range(self.num_layers-2, -1, -1):
             # Note since δ,W,b are all of length: num_layers-1, layer(Z[i]) == layer(b[i+1])
             self.W[i] += self.C * np.outer(self.Z[i], self.δ[i])
             self.b[i] += self.C * self.δ[i]
@@ -89,7 +96,7 @@ class NeuralNet:
         return num, names
 
     @staticmethod
-    def _num_array(v):
+    def _format_as_array(v):
         """
         Makes sure the provided argument is in array form, not just an int.
         """
@@ -112,7 +119,7 @@ class NeuralNet:
             The number of nodes for each layer
         """
         layers = [f]
-        layers.extend(cls._num_array(h))
+        layers.extend(cls._format_as_array(h))
         layers.append(c)
         return layers
 
