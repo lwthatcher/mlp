@@ -8,7 +8,7 @@ from mlp import util
 class NeuralNet:
 
     def __init__(self, features, hidden=20, classes=2, learning_rate=0.9, a_func=ReLU, max_epochs=1000, patience=20,
-                 validation_set=None):
+                 validation_set=None, classification=True):
         """
         Initializes the neural network.
         :type features: int or array-of-string
@@ -49,6 +49,7 @@ class NeuralNet:
         self.f_prime = a_func.f_prime
         # helper variables
         self.num_layers = len(layers)
+        self._classification = classification
         # stopping criteria
         if max_epochs is None:
             max_epochs = np.inf
