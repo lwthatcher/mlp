@@ -1,11 +1,11 @@
 import numpy as np
 import argparse
-import csv
+from sklearn.base import BaseEstimator, ClassifierMixin
 from mlp.activation_functions import ReLU, Sigmoid
 from mlp import util
 
 
-class NeuralNet:
+class NeuralNet(BaseEstimator, ClassifierMixin):
 
     def __init__(self, features, hidden=20, classes=2, learning_rate=0.9, a_func=ReLU, max_epochs=1000, patience=20,
                  validation_set=None, classification=True):
@@ -124,17 +124,6 @@ class NeuralNet:
             W.append(np.random.randn(layers[i], layers[i+1]))
             b.append(np.random.randn(1, layers[i+1]))
         return W, b
-
-
-def load_data_file(file):
-    features = []
-    labels = []
-    with open(file, newline='') as csv_file:
-        data_reader = csv.reader(csv_file, quoting=csv.QUOTE_NONNUMERIC)
-        for row in data_reader:
-            labels.append(row[-1])
-            features.append(row[:-1])
-    return np.array(features), np.array(labels)
 
 
 def parse_args(_args=None):

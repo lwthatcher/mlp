@@ -24,3 +24,11 @@ class TestUtil(TestCase):
         a2, b2 = util.num_and_names(names)
         self.assertEqual(a2, 3)
         np.testing.assert_array_equal(b2, names)
+
+    def test_load_data_file(self):
+        iris = "../examples/iris.txt"
+        features, labels = util.load_data_file(iris)
+        self.assertEqual(features.shape, (150, 4))
+        self.assertEqual(labels.shape, (150,))
+        np.testing.assert_array_equal(features[99, :], np.array([5.7, 2.8, 4.1, 1.3]))
+        self.assertEqual(labels[99], 1.)

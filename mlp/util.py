@@ -1,5 +1,6 @@
 """Module for holding common utility and helper functions"""
 import numpy as np
+import csv
 
 
 def format_as_array(v):
@@ -30,3 +31,14 @@ def num_and_names(v):
         num = len(v)
         names = v
     return num, names
+
+
+def load_data_file(file):
+    features = []
+    labels = []
+    with open(file, newline='') as csv_file:
+        data_reader = csv.reader(csv_file, quoting=csv.QUOTE_NONNUMERIC)
+        for row in data_reader:
+            labels.append(row[-1])
+            features.append(row[:-1])
+    return np.array(features), np.array(labels)
