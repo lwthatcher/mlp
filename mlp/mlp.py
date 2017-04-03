@@ -65,13 +65,18 @@ class NeuralNet(BaseEstimator, ClassifierMixin):
             for i in idx:
                 self._forward_prop(X[i])
                 self._back_prop(Y[i])
-            # TODO: implement BSSF, validation set, accuracy checks, and patience stopping criteria
+            epoch += 1
 
     def predict(self, X):
         out = []
         for x in X:
-            out.append(self._forward_prop(x))
-        # TODO: for classification take argmax
+            z = self._forward_prop(x)
+            if self._classification:
+                q = np.zeros(z.shape)
+                q[z.argmax()] = 1.
+                out.append(q)
+            else:
+                out.append(z)
         return np.array(out)
 
     def _forward_prop(self, x):

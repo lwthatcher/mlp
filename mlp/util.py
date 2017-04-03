@@ -1,6 +1,7 @@
 """Module for holding common utility and helper functions"""
 import numpy as np
 import csv
+from sklearn import preprocessing
 
 
 def format_as_array(v):
@@ -42,3 +43,8 @@ def load_data_file(file):
             labels.append(row[-1])
             features.append(row[:-1])
     return np.array(features), np.array(labels)
+
+
+def to_output_vector(labels):
+    f = preprocessing.LabelBinarizer()
+    return f.fit_transform(labels)
