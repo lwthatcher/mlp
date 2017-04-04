@@ -53,7 +53,7 @@ def cross_fold(X, Y, n, *model_args, **model_kwargs):
         print(Y_test)
         correct = np.where(out == Y_test)[0]
         # for now, just print results:
-        print(i, len(correct), "/", len(Y_test)*3)
+        print(i, len(correct), "/", len(Y_test)*3, model.score(X_train, Y_train))
 
 
 if __name__ == '__main__':
