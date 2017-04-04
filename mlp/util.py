@@ -48,3 +48,10 @@ def load_data_file(file):
 def to_output_vector(labels):
     f = preprocessing.LabelBinarizer()
     return f.fit_transform(labels)
+
+
+class BSSF:
+    def __init__(self, W, b, score):
+        self.W = [Wi.copy() for Wi in W]
+        self.b = [bi.copy() for bi in b]
+        self.score = score

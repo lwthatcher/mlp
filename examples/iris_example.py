@@ -19,7 +19,7 @@ def run_iris():
     X = features
     Y = util.to_output_vector(labels)
     args = [4, 10, 3]
-    kwargs = {"max_epochs": 150, "a_func": Sigmoid}
+    kwargs = {"max_epochs": 1000, "a_func": Sigmoid}
     cross_fold(X, Y, 10, *args, **kwargs)
 
 
@@ -44,16 +44,10 @@ def cross_fold(X, Y, n, *model_args, **model_kwargs):
         # create new model
         model = NeuralNet(*model_args, **model_kwargs)
         # train
-        model.fit(X_train, Y_train)
+        num_epochs = model.fit(X_train, Y_train)
         # compare
         out = model.predict(X_test)
-        print("predicted:")
-        print(out)
-        print("actual:")
-        print(Y_test)
-        correct = np.where(out == Y_test)[0]
-        # for now, just print results:
-        print(i, len(correct), "/", len(Y_test)*3, model.score(X_train, Y_train))
+        print(i, model.score(X_train, Y_train), num_epochs)
 
 
 if __name__ == '__main__':

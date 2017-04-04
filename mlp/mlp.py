@@ -3,6 +3,7 @@ import argparse
 from sklearn.base import BaseEstimator, ClassifierMixin
 from mlp.activation_functions import ReLU, Sigmoid
 from mlp import util
+from mlp.util import BSSF
 
 
 class NeuralNet(BaseEstimator, ClassifierMixin):
@@ -60,12 +61,27 @@ class NeuralNet(BaseEstimator, ClassifierMixin):
     def fit(self, X, Y):
         epoch = 0
         num_samples = len(X)
-        while epoch < self._max_epochs:
+        Δp = 0
+        bssf = BSSF(self.W, self.b, 0)
+        while epoch < self._max_epochs and Δp < self._patience:
             idx = util.shuffle_indices(num_samples)
             for i in idx:
                 self._forward_prop(X[i])
                 self._back_prop(Y[i])
             epoch += 1
+            # Do validation check
+            if self._VS:
+                score = self.score(self._VS[0], self._VS[1])
+                if score > bssf.score:
+                    bssf = BSSF(self.W, self.b, score)
+                    Δp = 0
+                else:
+                    Δp += 1
+        # if training stopped because of patience, use bssf instead
+        if self._VS and Δp >= self._patience:
+            self.W = bssf.W
+            self.b = bssf.b
+        return epoch
 
     def predict(self, X):
         out = []
