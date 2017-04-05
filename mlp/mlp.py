@@ -1,6 +1,7 @@
 import numpy as np
 import argparse
 from sklearn.base import BaseEstimator, ClassifierMixin
+from sklearn.metrics import accuracy_score
 from mlp.activation_functions import ReLU, Sigmoid
 from mlp import util
 from mlp.util import BSSF
@@ -85,17 +86,30 @@ class NeuralNet(BaseEstimator, ClassifierMixin):
             self.b = bssf.b
         return epoch
 
-    def predict(self, X):
+    def predict(self, X, multi_sets=False):
         out = []
-        for x in X:
-            z = self._forward_prop(x)
-            if self._classification:
-                q = np.zeros(z.shape)
-                q[z.argmax()] = 1.
-                out.append(q)
-            else:
-                out.append(z)
+        if not multi_sets:
+            X = [X]
+        for Xi in X:
+            for x in Xi:
+                z = self._forward_prop(x)
+                if self._classification:
+                    q = np.zeros(z.shape)
+                    q[z.argmax()] = 1.
+                    out.append(q)
+                else:
+                    out.append(z)
         return np.array(out)
+
+    def score(self, X, y, sample_weight=None, multi_sets=False):
+        if multi_sets:
+            y2 = y[0]
+            for yi in y[1:]:
+                y2 = np.vstack((y2, yi))
+        else:
+            y2 = y
+        predicted = self.predict(X, multi_sets)
+        return accuracy_score(y2, predicted, sample_weight=sample_weight)
 
     def _forward_prop(self, x):
         self.Z[0] = x.reshape(1, len(x))

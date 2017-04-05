@@ -12,6 +12,7 @@ class TestNeuralNet(TestCase):
         nn.W[1] = np.array([[.1, 1], [1, .25], [.1, 1]])
         nn.b[0] = np.array([[0., 0., 0.]])
         nn.b[1] = np.array([[1., -1.]])
+        nn._classification = False
         # input values
         X = np.array([[1., .4],
                       [0., 0.],

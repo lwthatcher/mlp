@@ -8,7 +8,7 @@ def run_blobs(n=5):
     X, Y = get_blob_sets(n)
     net = NeuralNet(4, 20, 6, a_func=Sigmoid, validation_set=(X[2], Y[2]))
     num_epochs = net.fit(X[:2], Y[:2], True)
-    score = net.score(X[-1], Y[-1])
+    score = net.score(X[2:], Y[2:], multi_sets=True)
     print("accuracy:", score)
     print("epochs:", num_epochs)
 
