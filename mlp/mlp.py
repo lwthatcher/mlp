@@ -1,5 +1,6 @@
 import numpy as np
 import argparse
+import mlp
 from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.metrics import accuracy_score
 from mlp.activation_functions import ReLU, Sigmoid
@@ -162,16 +163,3 @@ class NeuralNet(BaseEstimator, ClassifierMixin):
             W.append(np.random.randn(layers[i], layers[i+1]))
             b.append(np.random.randn(1, layers[i+1]))
         return W, b
-
-
-def parse_args(_args=None):
-    parser = argparse.ArgumentParser(description='Run a multilayer perceptron via vector operations')
-    parser.add_argument('data', help='file containing data')
-    parser.add_argument('--num_hidden', '-H', type=int, help='number of hidden nodes to use')
-    if _args is None:
-        return parser.parse_args()
-    return parser.parse_args(_args)
-
-if __name__ == '__main__':
-    args = parse_args()
-    print(args)
