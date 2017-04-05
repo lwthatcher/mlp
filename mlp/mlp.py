@@ -10,7 +10,7 @@ from mlp.util import BSSF
 class NeuralNet(BaseEstimator, ClassifierMixin):
 
     def __init__(self, features, hidden=20, classes=2, learning_rate=0.9, a_func=ReLU, max_epochs=1000, patience=20,
-                 validation_set=None, classification=True):
+                 validation_set=None, multi_vsets=False, classification=True):
         """
         Initializes the neural network.
         :type features: int or array-of-string
@@ -58,6 +58,7 @@ class NeuralNet(BaseEstimator, ClassifierMixin):
         self._max_epochs = max_epochs
         self._patience = patience
         self._VS = validation_set
+        self._multi_vsets = multi_vsets
 
     def fit(self, X, Y, multi_sets=False):
         epoch = 0
@@ -74,7 +75,7 @@ class NeuralNet(BaseEstimator, ClassifierMixin):
             epoch += 1
             # Do validation check
             if self._VS:
-                score = self.score(self._VS[0], self._VS[1])
+                score = self.score(self._VS[0], self._VS[1], multi_sets=self._multi_vsets)
                 if score > bssf.score:
                     bssf = BSSF(self.W, self.b, score)
                     Δp = 0

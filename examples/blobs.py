@@ -6,9 +6,9 @@ from mlp.activation_functions import ReLU, Sigmoid
 
 def run_blobs(n=5):
     X, Y = get_blob_sets(n)
-    net = NeuralNet(4, 20, 6, a_func=Sigmoid, validation_set=(X[2], Y[2]))
+    net = NeuralNet(4, 20, 6, a_func=Sigmoid, validation_set=(X[2:4], Y[2:4]), multi_vsets=True)
     num_epochs = net.fit(X[:2], Y[:2], True)
-    score = net.score(X[2:], Y[2:], multi_sets=True)
+    score = net.score(X[-1], Y[-1], multi_sets=False)
     print("accuracy:", score)
     print("epochs:", num_epochs)
 
