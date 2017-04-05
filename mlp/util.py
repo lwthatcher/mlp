@@ -17,17 +17,19 @@ def shuffle_indices(num_samples):
     return idx
 
 
-def get_indices(X, multi_sets):
+def get_indices(X, multi_sets, shuffle=True):
     if not multi_sets:
         idx = [(0, i) for i in np.arange(len(X[0]))]
-        np.random.shuffle(idx)
+        if shuffle:
+            np.random.shuffle(idx)
         return idx
     else:
         indices = [[(i, j) for j in np.arange(len(X[i]))] for i in np.arange(len(X))]
         idx = []
         for x in indices:
             idx.extend(x)
-        np.random.shuffle(idx)
+        if shuffle:
+            np.random.shuffle(idx)
         return idx
 
 

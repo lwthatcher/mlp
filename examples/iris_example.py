@@ -9,17 +9,11 @@ from sklearn.model_selection import cross_val_score
 def run_iris():
     features, labels = util.load_data_file("iris.txt")
     features = normalize(features, axis=0)
-    # get validation set
-    # num_examples = len(labels)
-    # idx = np.arange(num_examples)
-    # v_idx = np.random.choice(idx, 10, replace=False)
-    # val_x = features[v_idx]
-    # val_y = util.to_output_vector(labels[v_idx])
     # train/test set
     X = features
     Y = util.to_output_vector(labels)
     args = [4, 10, 3]
-    kwargs = {"max_epochs": 1000, "a_func": Sigmoid}
+    kwargs = {"max_epochs": 100, "a_func": Sigmoid}
     cross_fold(X, Y, 10, *args, **kwargs)
 
 
