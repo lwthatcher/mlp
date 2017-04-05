@@ -58,16 +58,18 @@ class NeuralNet(BaseEstimator, ClassifierMixin):
         self._patience = patience
         self._VS = validation_set
 
-    def fit(self, X, Y):
+    def fit(self, X, Y, multi_sets=False):
         epoch = 0
-        num_samples = len(X)
         Δp = 0
         bssf = BSSF(self.W, self.b, 0)
+        if not multi_sets:
+            X = [X]
+            Y = [Y]
         while epoch < self._max_epochs and Δp < self._patience:
-            idx = util.shuffle_indices(num_samples)
-            for i in idx:
-                self._forward_prop(X[i])
-                self._back_prop(Y[i])
+            idx = util.get_indices(X, multi_sets)
+            for i, j in idx:
+                self._forward_prop(X[i][j])
+                self._back_prop(Y[i][j])
             epoch += 1
             # Do validation check
             if self._VS:

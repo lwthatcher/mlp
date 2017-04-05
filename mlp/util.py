@@ -17,6 +17,20 @@ def shuffle_indices(num_samples):
     return idx
 
 
+def get_indices(X, multi_sets):
+    if not multi_sets:
+        idx = [(0, i) for i in np.arange(len(X[0]))]
+        np.random.shuffle(idx)
+        return idx
+    else:
+        indices = [[(i, j) for j in np.arange(len(X[i]))] for i in np.arange(len(X))]
+        idx = []
+        for x in indices:
+            idx.extend(x)
+        np.random.shuffle(idx)
+        return idx
+
+
 def num_and_names(v):
     """
     Converts the input v into both the length (num),
