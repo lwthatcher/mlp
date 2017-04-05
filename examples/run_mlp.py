@@ -17,6 +17,7 @@ def get_sets(S, _dir, _ext, name=None):
         Y.append(y)
     return X, Y
 
+
 def parse_args(_args=None):
     parser = argparse.ArgumentParser(description='Run a multilayer perceptron via vector operations')
     parser.add_argument('--num_features', '-f', type=int, default=4, help='number of features')
@@ -34,6 +35,7 @@ def parse_args(_args=None):
     if _args is None:
         return parser.parse_args()
     return parser.parse_args(_args)
+
 
 if __name__ == '__main__':
     args = parse_args()
