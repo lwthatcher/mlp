@@ -30,6 +30,7 @@ def parse_args(_args=None):
     parser.add_argument('--learning_rate', '-l', type=float, default=.9, help='learning rate to use')
     parser.add_argument('--max_epochs', '-e', type=int, default=1000, help='maximum number of epochs to allow')
     parser.add_argument('--patience', '-p', type=int, default=20, help='patience param')
+    parser.add_argument('--out', '-o', help='The output directory to save results to')
     if _args is None:
         return parser.parse_args()
     return parser.parse_args(_args)
@@ -46,3 +47,10 @@ if __name__ == '__main__':
     score = model.score(test[0], test[1], multi_sets=True)
     print("accuracy:", score)
     print("epochs:", num_epochs)
+    if args.out:
+        with open(args.out, 'a') as _f:
+            print("Training Sets:", args.train, "Validation Sets:", args.validation, "Test Sets:", args.test, file=_f)
+            print("hidden nodes:", args.num_hidden, file=_f)
+            print("learning rate:", args.learning_rate, "patience:", args.patience, "max epochs:", args.max_epochs, file=_f)
+            print("accuracy:", score, file=_f)
+            print("epochs:", num_epochs, file=_f)
